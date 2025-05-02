@@ -5,6 +5,7 @@ import postsRouter from "./routers/posts";
 import commentsRouter from "./routers/comments";
 import mongoose from "mongoose";
 import config from "./config";
+import path from "node:path";
 
 const app = express();
 const port = 8000;
@@ -14,6 +15,7 @@ app.use(cors());
 app.use("/users", usersRouter);
 app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
+app.use('/images', express.static(path.join(config.publicPath, 'images')));
 
 const run = async () => {
     await mongoose.connect(config.db)

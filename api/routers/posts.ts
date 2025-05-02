@@ -44,7 +44,7 @@ postsRouter.get("/", async (req, res, next) => {
             .sort({datetime: -1})
             .populate({
                 path: "user",
-                select: "username",
+                select: "username -_id",
             });
         res.send(allPosts);
     } catch (err) {
