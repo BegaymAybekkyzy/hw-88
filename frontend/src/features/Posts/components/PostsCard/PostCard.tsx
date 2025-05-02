@@ -3,6 +3,7 @@ import {Card, CardActionArea, CardMedia,CardContent,Typography, Box} from "@mui/
 import {IPostApi} from "../../../../types.s.ts";
 import {BASE_URL} from "../../../../constants.ts";
 import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
+import {NavLink} from "react-router-dom";
 
 interface Props {
   post: IPostApi;
@@ -40,7 +41,7 @@ const PostCard: React.FC<Props> = ({post}) => {
               <Typography color="text.secondary">
                 {dayjs(post.datetime).format("DD.MM.YYYY HH:mm")} by {post.user.username}
               </Typography>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography to={`/post/${post._id}`} gutterBottom variant="h5" component={NavLink}>
                 {post.title}
               </Typography>
             </CardContent>

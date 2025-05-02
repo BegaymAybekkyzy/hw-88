@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {selectAllPost, selectFetchingLoading} from "./postsSlice.ts";
+import {selectAllPost, selectPostFetchingLoading} from "./postsSlice.ts";
 import {fetchAllPosts} from "./postsThunks.ts";
 import Loader from "../../components/UI/Loader/Loader.tsx";
 import PostCard from "./components/PostsCard/PostCard.tsx";
@@ -8,7 +8,7 @@ import PostCard from "./components/PostsCard/PostCard.tsx";
 const PostList = () => {
     const dispatch = useAppDispatch();
     const allPosts = useAppSelector(selectAllPost);
-    const loading = useAppSelector(selectFetchingLoading);
+    const loading = useAppSelector(selectPostFetchingLoading);
 
     useEffect(() => {
         dispatch(fetchAllPosts());

@@ -1,6 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import axiosAPI from "../../axiosAPI.ts";
-import {IPostApi, IPostForm} from "../../types.s.ts";
+import {IError, IPostApi, IPostForm} from "../../types.s.ts";
+import {RootState} from "../../app/store.ts";
+import {isAxiosError} from "axios";
 
 export const fetchAllPosts = createAsyncThunk<
     IPostApi[],
@@ -17,14 +19,11 @@ export const fetchAllPosts = createAsyncThunk<
     }
 );
 
-export const fetchPostByID = createAsyncThunk<
-    IPostApi,
-    string
->(
+export const fetchPostByID = createAsyncThunk<IPostApi, string>(
     "posts/fetchPostByID",
     async (id) => {
        try {
-           const response = await axiosAPI(`posts/${id}`)
+           const response = await axiosAPI(`posts/${id}`);
            return response.data;
        }catch (err) {
            console.error(err)
@@ -34,11 +33,13 @@ export const fetchPostByID = createAsyncThunk<
 
 export const createPost = createAsyncThunk<
     void,
-    IPostForm
+    IPostForm,
+    { state: RootState, rejectValue: IError }
 >(
     "posts/createPost",
-    async (newPost) => {
+    async (newPost, thunkAPI) => {
         try {
+            const token = thunkAPI.getState().users.user?.token;
             const formData = new FormData();
             const keys = Object.keys(newPost) as (keyof IPostForm)[];
 
@@ -49,9 +50,13 @@ export const createPost = createAsyncThunk<
                 }
             });
 
-            await axiosAPI.post("posts", formData);
+            await axiosAPI.post("posts", formData, {headers: {Authorization: `Bearer ${token}`}});
         }catch (err) {
-            console.error(err)
+            if (isAxiosError(err) && err.response && err.response.status === 401) {
+                return thunkAPI.rejectWithValue(err.response.data);
+            }
+
+            throw err;
         }
     }
 )

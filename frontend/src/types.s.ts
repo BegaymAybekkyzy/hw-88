@@ -28,7 +28,6 @@ export interface IError {
 export interface IPostApi {
     _id: string;
     user: {
-        _id: string;
         username: string;
     }
     title: string;
@@ -38,7 +37,22 @@ export interface IPostApi {
 }
 
 export interface IPostForm {
+    user: string;
     title: string;
     description: string;
     image: File | null;
+}
+
+export interface ICommentApi {
+    _id: string;
+    user: {
+        username: string;
+    }
+    post: string;
+    text: string;
+}
+
+export interface ICommentForm {
+    post: string;
+    text: string;
 }
