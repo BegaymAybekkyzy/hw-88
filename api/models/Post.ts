@@ -1,4 +1,5 @@
 import mongoose, {Schema} from "mongoose";
+import User from "./User";
 
 const postSchema = new mongoose.Schema({
     user: {
@@ -7,10 +8,10 @@ const postSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: async (doc: Schema.Types.ObjectId) => {
-                const post = await Post.findById(doc);
-                return !!post;
+                const user = await User.findById(doc);
+                return !!user;
             },
-            message: "Post not found",
+            message: "User not found",
         }
     },
     title: {
