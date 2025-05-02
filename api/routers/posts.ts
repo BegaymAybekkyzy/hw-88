@@ -14,7 +14,7 @@ postsRouter.post("/", authentication, imagesUpload.single("image"), async (req, 
             res.status(401).send({error: "User not found"});
         }
 
-        if(!req.file && !req.body.description) {
+        if (!req.file && !req.body.description) {
             res.status(404).send({error: "Fill in the image or description field"});
         }
 
@@ -28,7 +28,7 @@ postsRouter.post("/", authentication, imagesUpload.single("image"), async (req, 
 
         await newPost.save();
         res.send(newPost);
-    }catch (err) {
+    } catch (err) {
         if (err instanceof Error.ValidationError || err instanceof Error.CastError) {
             res.status(400).send(err);
             return;
@@ -39,9 +39,15 @@ postsRouter.post("/", authentication, imagesUpload.single("image"), async (req, 
 
 postsRouter.get("/", async (req, res, next) => {
     try {
-        const allPosts = await Post.find().sort({datetime: -1});
+        const allPosts = await Post.find()
+            .select("-description")
+            .sort({datetime: -1})
+            .populate({
+                path: "user",
+                select: "username",
+            });
         res.send(allPosts);
-    }catch (err) {
+    } catch (err) {
         next(err);
     }
 });
@@ -57,7 +63,7 @@ postsRouter.get("/:id", async (req, res, next) => {
         }
 
         res.send(post);
-    }catch (err) {
+    } catch (err) {
         if (err instanceof Error.ValidationError || err instanceof Error.CastError) {
             res.status(400).send(err);
             return;
