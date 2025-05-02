@@ -4,11 +4,13 @@ import mongoose, {Schema} from "mongoose";
 const commentSchema = new mongoose.Schema({
     user: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: "User",
     },
     post: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: "Post",
     },
     text: {
         type: String,
