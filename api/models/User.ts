@@ -17,7 +17,7 @@ const ARGON2_OPTIONS = {
 
 type UserModel = Model<IUser, {}, UserMethods>;
 
-export const JWT = process.env["JWT_SECRET "] || 'default_fallback_secret';
+export const JWT = process.env.JWT_SECRET || 'default_fallback_secret';
 
 const UserSchema = new mongoose.Schema<
     HydratedDocument<IUser>,
