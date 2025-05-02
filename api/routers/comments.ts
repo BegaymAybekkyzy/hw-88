@@ -37,7 +37,11 @@ commentsRouter.get("/", async (req, res, next) => {
             filter = {post}
         }
 
-        const comments = await Comment.find(filter);
+        const comments = await Comment.find(filter)
+            .populate({
+                path: "user",
+                select: "username -_id",
+            });
         res.send(comments);
 
     } catch (err) {
