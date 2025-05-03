@@ -81,7 +81,7 @@ const PostDetail = () => {
             <>
                 {comments.map((comment) => (
                     <CommentCard
-                        key={id}
+                        key={comment._id}
                         comment={comment}
                     />
                 ))}
